@@ -13,13 +13,13 @@
 
 使用 Swift Package Manager 安装：
 
-1. 赋值库的路径
+1. 复制库的路径
 
 ```
 https://github.com/Lebron1992/LBJImagePreviewer
 ```
 
-2. 在 Xcode 中打开菜单 `File/Add Packages`
+2. 在 Xcode 中打开菜单 `File / Add Packages`
 3. 把路径粘贴到搜索框，根据提示把库添加到项目中
 
 ## 使用
