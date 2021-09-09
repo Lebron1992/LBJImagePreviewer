@@ -9,6 +9,10 @@
 - 手势缩放和滚动
 - 双击放大缩小
 
+### 预览
+
+![preview](./preview.gif)
+
 ## 安装
 
 使用 Swift Package Manager 安装：
@@ -24,16 +28,30 @@ https://github.com/Lebron1992/LBJImagePreviewer
 
 ## 使用
 
-你可以使用 `UIImage` 或 `Image` 创建 `LBJImagePreviewer`：
+### `UIImage`
+
+预览 `UIImage`：
 
 ```swift
 let uiImage = UIImage(named: "lebron")!
+LBJUIImagePreviewer(uiImage: uiImage)
+```
 
-// 使用 `UIImage`
-LBJImagePreviewer(uiImage: uiImage)
+### `Image`
 
-// 使用 `Image`，需要传入 `Image` 的宽高比
-LBJImagePreviewer(image: Image(uiImage: uiImage), aspectRatio: 2 / 3)
+预览 `Image`：
+
+```swift
+// 需要传入 `Image` 的宽高比
+LBJImagePreviewer(content: Image(uiImage: uiImage), aspectRatio: 2 / 3)
+```
+
+### 任意 `View`
+
+如果你不是直接通过 `UIImage` 或者 `Image` 来显示图片，你可以预览任意 `View`。例如预览一个红色背景：
+
+```swift
+LBJViewZoomer<Color>(content: .red, aspectRatio: 1)
 ```
 
 ### 指定最大放大倍数

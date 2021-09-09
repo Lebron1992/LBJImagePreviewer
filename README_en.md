@@ -7,6 +7,10 @@
 - Zoom with magnification gesture
 - Double click to zoom in/out
 
+### Preview
+
+![preview](./preview.gif)
+
 ## Installation
 
 `LBJImagePreviewer` can be installed using Swift Package Manager:
@@ -23,15 +27,30 @@ https://github.com/Lebron1992/LBJImagePreviewer
 
 ## Usage
 
-You can use `UIImage` or `Image` to create `LBJImagePreviewer`:
+### `UIImage`
+
+Preview `UIImage`：
+
 ```swift
 let uiImage = UIImage(named: "lebron")!
+LBJUIImagePreviewer(uiImage: uiImage)
+```
 
-// UIImage
-LBJImagePreviewer(uiImage: uiImage)
+### `Image`
 
-// Image, the width/height ratio of Image is needed
-LBJImagePreviewer(image: Image(uiImage: uiImage), aspectRatio: 2 / 3)
+Preview `Image`：
+
+```swift
+// the width/height ratio of `Image` is needed
+LBJImagePreviewer(content: Image(uiImage: uiImage), aspectRatio: 2 / 3)
+```
+
+### Any `View`
+
+If you don't preview an image with `UIImage` or `Image`, you could preview any `View`. For example, we preview a red background:
+
+```swift
+LBJViewZoomer<Color>(content: .red, aspectRatio: 1)
 ```
 
 ### Max Scale
