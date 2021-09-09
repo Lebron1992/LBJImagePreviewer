@@ -6,12 +6,21 @@ public struct LBJImagePreviewer: View {
   private let imageInfo: (image: Image, aspectRatio: CGFloat)?
   private let maxScale: CGFloat
 
+  /// 使用 `UIImage` 和最大放大倍数创建 `LBJImagePreviewer` (Creates an `LBJImagePreviewer` view using an `UIImage` object and max scale)。
+  /// - Parameters:
+  ///   - uiImage: `UIImage` 对象 (an `UIImage` object)
+  ///   - maxScale: 最大放大倍数 (max scale)
   public init(uiImage: UIImage, maxScale: CGFloat = Constant.defaultMaxScale) {
     self.uiImage = uiImage
     self.imageInfo = nil
     self.maxScale = maxScale
   }
 
+  /// 使用 `Image` 、宽高比例和最大放大倍数创建 `LBJImagePreviewer` (Creates an `LBJImagePreviewer` view using an `Image` view, width/height ratio and max scale)。
+  /// - Parameters:
+  ///   - image: `Image` 视图 (an `Image` view)
+  ///   - aspectRatio: `Image` 视图的宽高比例 (the width/height ratio of the `Image` view)
+  ///   - maxScale: 最大放大倍数 (max scale)
   public init(image: Image, aspectRatio: CGFloat, maxScale: CGFloat = Constant.defaultMaxScale) {
     self.uiImage = nil
     self.imageInfo = (image, aspectRatio)
