@@ -4,26 +4,42 @@ public struct LBJViewZoomer<ContentView: View>: View {
 
   private let uiImage: UIImage?
   private let contentInfo: (content: ContentView, aspectRatio: CGFloat)?
+  private let doubleTapScale: CGFloat
   private let maxScale: CGFloat
 
-  /// 使用 `UIImage` 和最大放大倍数创建 `LBJViewZoomer` (Creates an `LBJViewZoomer` view using an `UIImage` object and max scale)。
+  /// 使用 `UIImage`、双击放大时的倍数和最大放大倍数创建 `LBJViewZoomer`
+  /// (Creates an `LBJViewZoomer` view using an `UIImage` object, the zoom scale when user double-tap the image and max scale)。
   /// - Parameters:
   ///   - uiImage: `UIImage` 对象 (an `UIImage` object)
-  ///   - maxScale: 最大放大倍数 (max scale)
-  public init(uiImage: UIImage, maxScale: CGFloat = LBJImagePreviewerConstants.defaultMaxScale) {
+  ///   - doubleTapScale: 双击放大时的倍数，默认是 3 (the zoom scale when user double-tap the image, 3 by default)
+  ///   - maxScale: 最大放大倍数 (max scale, 16 by default)
+  public init(
+    uiImage: UIImage,
+    doubleTapScale: CGFloat = LBJImagePreviewerConstants.defaultDoubleTapScale,
+    maxScale: CGFloat = LBJImagePreviewerConstants.defaultMaxScale
+  ) {
     self.uiImage = uiImage
     self.contentInfo = nil
+    self.doubleTapScale = doubleTapScale
     self.maxScale = maxScale
   }
 
-  /// 使用 `View` 、宽高比例和最大放大倍数创建 `LBJViewZoomer` (Creates an `LBJViewZoomer` view using an `View`, width/height ratio and max scale)。
+  /// 使用 `View` 、宽高比例、双击放大时的倍数和最大放大倍数创建 `LBJViewZoomer`
+  /// (Creates an `LBJViewZoomer` view using an `View`, width/height ratio, the zoom scale when user double-tap the image and max scale)。
   /// - Parameters:
   ///   - image: `View` 视图 (an `View`)
   ///   - aspectRatio: `View` 的宽高比例 (the width/height ratio of the `View`)
-  ///   - maxScale: 最大放大倍数 (max scale)
-  public init(content: ContentView, aspectRatio: CGFloat, maxScale: CGFloat = LBJImagePreviewerConstants.defaultMaxScale) {
+  ///   - doubleTapScale: 双击放大时的倍数，默认是 3 (the zoom scale when user double-tap the image, 3 by default)
+  ///   - maxScale: 最大放大倍数 (max scale, 16 by default)
+  public init(
+    content: ContentView,
+    aspectRatio: CGFloat,
+    doubleTapScale: CGFloat = LBJImagePreviewerConstants.defaultDoubleTapScale,
+    maxScale: CGFloat = LBJImagePreviewerConstants.defaultMaxScale
+  ) {
     self.uiImage = nil
     self.contentInfo = (content, aspectRatio)
+    self.doubleTapScale = doubleTapScale
     self.maxScale = maxScale
   }
 
@@ -84,7 +100,7 @@ private extension LBJViewZoomer {
           if zoomScale > 1 {
             steadyStateZoomScale = 1
           } else {
-            steadyStateZoomScale = maxScale
+            steadyStateZoomScale = doubleTapScale
           }
         }
       }
@@ -151,12 +167,13 @@ private extension LBJViewZoomer {
   }
 
   func zoomedImageSize(in geometry: GeometryProxy) -> CGSize {
-    imageSize(fits: geometry) * zoomScale * zoomScale
+    imageSize(fits: geometry) * zoomScale
   }
 }
 
 public enum LBJImagePreviewerConstants {
-  public static let defaultMaxScale: CGFloat = 3
+  public static let defaultDoubleTapScale: CGFloat = 3
+  public static let defaultMaxScale: CGFloat = 16
 }
 
 #if DEBUG
