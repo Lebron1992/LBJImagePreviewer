@@ -54,13 +54,22 @@ LBJImagePreviewer(content: Image(uiImage: uiImage), aspectRatio: 2 / 3)
 LBJViewZoomer<Color>(content: .red, aspectRatio: 1)
 ```
 
-### 指定最大放大倍数
+### 指定双击时的放大倍数
 
-另外还提供了 `maxScale`，用于指定最大放大倍数，默认值是 `3`：
+指定当用户双击图片时的放大倍数，默认是 `3`：
 
 ```swift
-LBJImagePreviewer(uiImage: uiImage, maxScale: 5)
-LBJImagePreviewer(image: Image(uiImage: uiImage), aspectRatio: 2 / 3, maxScale: 5)
+LBJUIImagePreviewer(uiImage: uiImage, doubleTapScale: 5)
+LBJImagePreviewer(content: Image(uiImage: uiImage), aspectRatio: 2 / 3, doubleTapScale: 5)
+```
+
+### 指定最大放大倍数
+
+指定最大放大倍数，默认是 `16`：
+
+```swift
+LBJUIImagePreviewer(uiImage: uiImage, maxScale: 20)
+LBJImagePreviewer(content: Image(uiImage: uiImage), aspectRatio: 2 / 3, maxScale: 20)
 ```
 
 ## 存在问题

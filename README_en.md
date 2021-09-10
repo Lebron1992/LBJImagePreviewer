@@ -53,13 +53,22 @@ If you don't preview an image with `UIImage` or `Image`, you could preview any `
 LBJViewZoomer<Color>(content: .red, aspectRatio: 1)
 ```
 
-### Max Scale
+### Double-Tap Scale
 
-Also you can specify the max scale(`3` by default) when you creating `LBJImagePreviewer`: 
+You can specify the scale(`3` by default) for double-tap to zoom in: 
 
 ```swift
-LBJImagePreviewer(uiImage: uiImage, maxScale: 5)
-LBJImagePreviewer(image: Image(uiImage: uiImage), aspectRatio: 2 / 3, maxScale: 5)
+LBJUIImagePreviewer(uiImage: uiImage, doubleTapScale: 5)
+LBJImagePreviewer(content: Image(uiImage: uiImage), aspectRatio: 2 / 3, doubleTapScale: 5)
+```
+
+### Max Scale
+
+Also you can specify the max scale(`16` by default): 
+
+```swift
+LBJUIImagePreviewer(uiImage: uiImage, maxScale: 20)
+LBJImagePreviewer(content: Image(uiImage: uiImage), aspectRatio: 2 / 3, maxScale: 20)
 ```
 ## Existing Issues
 
