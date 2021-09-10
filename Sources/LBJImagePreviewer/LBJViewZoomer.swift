@@ -2,8 +2,7 @@ import SwiftUI
 
 public struct LBJViewZoomer<ContentView: View>: View {
 
-  private let uiImage: UIImage?
-  private let contentInfo: (content: ContentView, aspectRatio: CGFloat)?
+  private let contentInfo: (content: ContentView, aspectRatio: CGFloat)
   private let doubleTapScale: CGFloat
   private let maxScale: CGFloat
 
@@ -18,10 +17,12 @@ public struct LBJViewZoomer<ContentView: View>: View {
     doubleTapScale: CGFloat = LBJImagePreviewerConstants.defaultDoubleTapScale,
     maxScale: CGFloat = LBJImagePreviewerConstants.defaultMaxScale
   ) {
-    self.uiImage = uiImage
-    self.contentInfo = nil
-    self.doubleTapScale = doubleTapScale
-    self.maxScale = maxScale
+    self.init(
+      content: Image(uiImage: uiImage) as! ContentView,
+      aspectRatio: uiImage.size.width / uiImage.size.height,
+      doubleTapScale: doubleTapScale,
+      maxScale: maxScale
+    )
   }
 
   /// 使用 `View` 、宽高比例、双击放大时的倍数和最大放大倍数创建 `LBJViewZoomer`
@@ -37,7 +38,6 @@ public struct LBJViewZoomer<ContentView: View>: View {
     doubleTapScale: CGFloat = LBJImagePreviewerConstants.defaultDoubleTapScale,
     maxScale: CGFloat = LBJImagePreviewerConstants.defaultMaxScale
   ) {
-    self.uiImage = nil
     self.contentInfo = (content, aspectRatio)
     self.doubleTapScale = doubleTapScale
     self.maxScale = maxScale
@@ -72,18 +72,12 @@ public struct LBJViewZoomer<ContentView: View>: View {
 private extension LBJViewZoomer {
   @ViewBuilder
   var imageContent: some View {
-    if let uiImage = uiImage {
-      Image(uiImage: uiImage)
+    if let image = contentInfo.content as? Image {
+      image
         .resizable()
         .aspectRatio(contentMode: .fit)
-    }
-
-    if let content = contentInfo?.content {
-      if let image = content as? Image {
-        image.resizable()
-      } else {
-        content
-      }
+    } else {
+      contentInfo.content
     }
   }
 }
@@ -140,30 +134,20 @@ private extension LBJViewZoomer {
 private extension LBJViewZoomer {
 
   func imageSize(fits geometry: GeometryProxy) -> CGSize {
-    if let uiImage = uiImage {
-      let hZoom = geometry.size.width / uiImage.size.width
-      let vZoom = geometry.size.height / uiImage.size.height
-      return uiImage.size * min(hZoom, vZoom)
+    let geoRatio = geometry.size.width / geometry.size.height
+    let imageRatio = contentInfo.aspectRatio
 
-    } else if let contentInfo = contentInfo {
-      let geoRatio = geometry.size.width / geometry.size.height
-      let imageRatio = contentInfo.aspectRatio
-
-      let width: CGFloat
-      let height: CGFloat
-      if imageRatio < geoRatio {
-        height = geometry.size.height
-        width = height * imageRatio
-      } else {
-        width = geometry.size.width
-        height = width / imageRatio
-      }
-
-      return .init(width: width, height: height)
-
+    let width: CGFloat
+    let height: CGFloat
+    if imageRatio < geoRatio {
+      height = geometry.size.height
+      width = height * imageRatio
     } else {
-      fatalError("you must provide a UIImage or Image")
+      width = geometry.size.width
+      height = width / imageRatio
     }
+
+    return .init(width: width, height: height)
   }
 
   func zoomedImageSize(in geometry: GeometryProxy) -> CGSize {

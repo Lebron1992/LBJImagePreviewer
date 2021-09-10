@@ -1,3 +1,3 @@
 import SwiftUI
 
-public typealias LBJUIImagePreviewer = LBJViewZoomer<EmptyView>
+public typealias LBJUIImagePreviewer = LBJViewZoomer<Image>
