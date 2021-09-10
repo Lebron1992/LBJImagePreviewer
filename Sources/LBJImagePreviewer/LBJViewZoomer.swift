@@ -6,25 +6,6 @@ public struct LBJViewZoomer<ContentView: View>: View {
   private let doubleTapScale: CGFloat
   private let maxScale: CGFloat
 
-  /// 使用 `UIImage`、双击放大时的倍数和最大放大倍数创建 `LBJViewZoomer`
-  /// (Creates an `LBJViewZoomer` view using an `UIImage` object, the zoom scale when user double-tap the image and max scale)。
-  /// - Parameters:
-  ///   - uiImage: `UIImage` 对象 (an `UIImage` object)
-  ///   - doubleTapScale: 双击放大时的倍数，默认是 3 (the zoom scale when user double-tap the image, 3 by default)
-  ///   - maxScale: 最大放大倍数 (max scale, 16 by default)
-  public init(
-    uiImage: UIImage,
-    doubleTapScale: CGFloat = LBJImagePreviewerConstants.defaultDoubleTapScale,
-    maxScale: CGFloat = LBJImagePreviewerConstants.defaultMaxScale
-  ) {
-    self.init(
-      content: Image(uiImage: uiImage) as! ContentView,
-      aspectRatio: uiImage.size.width / uiImage.size.height,
-      doubleTapScale: doubleTapScale,
-      maxScale: maxScale
-    )
-  }
-
   /// 使用 `View` 、宽高比例、双击放大时的倍数和最大放大倍数创建 `LBJViewZoomer`
   /// (Creates an `LBJViewZoomer` view using an `View`, width/height ratio, the zoom scale when user double-tap the image and max scale)。
   /// - Parameters:
@@ -155,37 +136,30 @@ private extension LBJViewZoomer {
   }
 }
 
-public enum LBJImagePreviewerConstants {
-  public static let defaultDoubleTapScale: CGFloat = 3
-  public static let defaultMaxScale: CGFloat = 16
-}
-
 #if DEBUG
 struct LBJImagePreviewer_Previews: PreviewProvider {
-
-  struct MyImage: View {
-    let image: Image
-
-    var body: some View {
-      image.resizable()
-    }
-  }
-
   static var previews: some View {
-    let uiImages = (1...3).compactMap { UIImage(named: "IMG_000\($0)", in: .module, with: nil) }
-    LBJUIImagePreviewer(uiImage: uiImages[0])
+    let uiImages = (1...2).compactMap { UIImage(named: "IMG_000\($0)", in: .module, with: nil) }
     LBJImagePreviewer(
-      content: Image(uiImage: uiImages[1]),
-      aspectRatio: uiImages[1].size.width / uiImages[1].size.height
+      content: Image(uiImage: uiImages[0]),
+      aspectRatio: uiImages[0].size.width / uiImages[0].size.height
     )
     LBJViewZoomer<MyImage>(
-      content: MyImage(image: Image(uiImage: uiImages[2])),
-      aspectRatio: uiImages[2].size.width / uiImages[2].size.height
+      content: MyImage(image: Image(uiImage: uiImages[1])),
+      aspectRatio: uiImages[1].size.width / uiImages[1].size.height
     )
     LBJViewZoomer<Color>(
       content: .red,
       aspectRatio: 1
     )
+  }
+
+  struct MyImage: View {
+    let image: Image
+
+    var body: some View {
+      image
+    }
   }
 }
 #endif
