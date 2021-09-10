@@ -1,8 +1,8 @@
 import SwiftUI
 
-public struct LBJViewZoomer<ContentView: View>: View {
+public struct LBJViewZoomer<Content: View>: View {
 
-  private let contentInfo: (content: ContentView, aspectRatio: CGFloat)
+  private let contentInfo: (content: Content, aspectRatio: CGFloat)
   private let doubleTapScale: CGFloat
   private let maxScale: CGFloat
 
@@ -14,7 +14,7 @@ public struct LBJViewZoomer<ContentView: View>: View {
   ///   - doubleTapScale: 双击放大时的倍数，默认是 3 (the zoom scale when user double-tap the image, 3 by default)
   ///   - maxScale: 最大放大倍数 (max scale, 16 by default)
   public init(
-    content: ContentView,
+    content: Content,
     aspectRatio: CGFloat,
     doubleTapScale: CGFloat = LBJImagePreviewerConstants.defaultDoubleTapScale,
     maxScale: CGFloat = LBJImagePreviewerConstants.defaultMaxScale
