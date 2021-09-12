@@ -22,6 +22,8 @@ public struct LBJUIImagePreviewer: View {
     self.maxScale = maxScale
   }
 
+  var resetScaleOnDisappear = true
+
   public var body: some View {
     LBJViewZoomer(
       content: Image(uiImage: uiImage),
@@ -29,6 +31,7 @@ public struct LBJUIImagePreviewer: View {
       doubleTapScale: doubleTapScale,
       maxScale: maxScale
     )
+      .resetScaleOnDisappear(resetScaleOnDisappear)
   }
 }
 

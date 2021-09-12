@@ -70,6 +70,18 @@ Also you can specify the max scale(`16` by default):
 LBJUIImagePreviewer(uiImage: uiImage, maxScale: 20)
 LBJImagePreviewer(content: Image(uiImage: uiImage), aspectRatio: 2 / 3, maxScale: 20)
 ```
+
+### Reset Scale On Disappear
+
+Sets wheather reset the scale on disappear, `true` by default: 
+
+```swift
+LBJUIImagePreviewer(uiImage: uiImage, maxScale: 20)
+  .resetScaleOnDisappear(true)
+LBJImagePreviewer(content: Image(uiImage: uiImage), aspectRatio: 2 / 3, maxScale: 20)
+  .resetScaleOnDisappear(false)
+```
+
 ## Existing Issues
 
 - When you double-click to zoom in, the image can ONLY be zoomed in from the middle, not at the click location. (Currently, we can't set `contentOffset` for `ScrollView` manually, so we have to wait for the `ScrollView` updates to solve the issue.)

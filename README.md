@@ -72,6 +72,17 @@ LBJUIImagePreviewer(uiImage: uiImage, maxScale: 20)
 LBJImagePreviewer(content: Image(uiImage: uiImage), aspectRatio: 2 / 3, maxScale: 20)
 ```
 
+### 消失时是否重置倍数
+
+设置消失时是否重置倍数，默认是 `true`：
+
+```swift
+LBJUIImagePreviewer(uiImage: uiImage, maxScale: 20)
+  .resetScaleOnDisappear(true)
+LBJImagePreviewer(content: Image(uiImage: uiImage), aspectRatio: 2 / 3, maxScale: 20)
+  .resetScaleOnDisappear(false)
+```
+
 ## 存在问题
 
 - 双击放大时，图片只能从中间位置放大，无法在点击位置放大。（目前 `ScrollView` 无法手动设置 `contentOffset`，等待 `ScrollView` 更新以解决这个问题。）
