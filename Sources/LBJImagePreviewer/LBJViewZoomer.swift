@@ -24,6 +24,8 @@ public struct LBJViewZoomer<Content: View>: View {
     self.maxScale = maxScale
   }
 
+  var resetScaleOnDisappear = true
+
   @State
   private var steadyStateZoomScale: CGFloat = 1
 
@@ -46,6 +48,11 @@ public struct LBJViewZoomer<Content: View>: View {
       .background(Color.black)
     }
     .ignoresSafeArea()
+    .onDisappear {
+      if resetScaleOnDisappear {
+        steadyStateZoomScale = 1
+      }
+    }
   }
 }
 
