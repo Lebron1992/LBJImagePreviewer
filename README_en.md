@@ -7,7 +7,7 @@
 - Zoom with magnification gesture
 - Double click to zoom in/out
 
-### Preview
+## Preview
 
 ![preview](./preview.gif)
 
