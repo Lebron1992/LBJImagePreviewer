@@ -6,6 +6,7 @@
 
 - Zoom with magnification gesture
 - Double click to zoom in/out
+- Supports gif images
 
 ## Preview
 
@@ -43,6 +44,19 @@ Preview `Image`：
 ```swift
 // the width/height ratio of `Image` is needed
 LBJImagePreviewer(content: Image(uiImage: uiImage), aspectRatio: 2 / 3)
+```
+
+### Gif images
+
+Preview gif images：
+
+```swift
+LBJGIFImagePreviewer(imageNamed: "lebron")
+
+if let url = Bundle.main.url(forResource: "lebron", withExtension: "gif"),
+   let data = try? Data(contentsOf: url) {
+  LBJGIFImagePreviewer(imageData: data)
+}
 ```
 
 ### Any `View`

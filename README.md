@@ -8,6 +8,7 @@
 
 - 手势缩放和滚动
 - 双击放大缩小
+- 支持 gif 动态图
 
 ## 预览
 
@@ -44,6 +45,19 @@ LBJUIImagePreviewer(uiImage: uiImage)
 ```swift
 // 需要传入 `Image` 的宽高比
 LBJImagePreviewer(content: Image(uiImage: uiImage), aspectRatio: 2 / 3)
+```
+
+### Gif 动态图
+
+预览 Gif 动态图：
+
+```swift
+LBJGIFImagePreviewer(imageNamed: "lebron")
+
+if let url = Bundle.main.url(forResource: "lebron", withExtension: "gif"),
+   let data = try? Data(contentsOf: url) {
+  LBJGIFImagePreviewer(imageData: data)
+}
 ```
 
 ### 任意 `View`
