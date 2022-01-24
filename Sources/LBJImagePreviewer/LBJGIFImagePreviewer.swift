@@ -6,6 +6,9 @@ public struct LBJGIFImagePreviewer: View {
   private let doubleTapScale: CGFloat
   private let maxScale: CGFloat
 
+  @ObservedObject
+  private var animator: Animator
+
   /// 使用 `Data`、双击放大时的倍数和最大放大倍数创建 `LBJGIFImagePreviewer`
   /// (Creates an `LBJGIFImagePreviewer` view using the gif image data, the zoom scale when user double-tap the image and max scale)。
   /// - Parameters:
@@ -20,6 +23,7 @@ public struct LBJGIFImagePreviewer: View {
     self.imageData = imageData
     self.doubleTapScale = doubleTapScale
     self.maxScale = maxScale
+    self.animator = Animator(imageData: imageData)
   }
 
   /// 使用 gif 图片名字、图片所在的 `Bundle`、双击放大时的倍数和最大放大倍数创建 `LBJGIFImagePreviewer`
@@ -48,28 +52,62 @@ public struct LBJGIFImagePreviewer: View {
 
     self.doubleTapScale = doubleTapScale
     self.maxScale = maxScale
+    self.animator = Animator(imageData: imageData)
   }
 
-  var resetScaleOnDisappear = true
+  private var resetScaleOnDisappear = true
 
   public var body: some View {
-    if let imageData = imageData {
-      var aspectRatio: CGFloat = 1
-      if let imageSize = UIImage(data: imageData)?.size {
-        aspectRatio = imageSize.width / imageSize.height
-      }
-      return GeometryReader { geometry in
-        LBJViewZoomer(
-          content: GifImageView(imageData: imageData, geometry: geometry),
-          aspectRatio: aspectRatio,
+    ZStack {
+      if let uiImage = animator.uiImage {
+        LBJUIImagePreviewer(
+          uiImage: uiImage,
           doubleTapScale: doubleTapScale,
           maxScale: maxScale
         )
           .resetScaleOnDisappear(resetScaleOnDisappear)
       }
-      .asAnyView()
-    } else {
-      return EmptyView().asAnyView()
+    }
+    .onAppear(perform: animator.startAnimating)
+    .onDisappear(perform: animator.stopAnimating)
+  }
+}
+
+private extension LBJGIFImagePreviewer {
+  final class Animator: ObservableObject {
+
+    private let imageData: Data?
+
+    init(imageData: Data?) {
+      self.imageData = imageData
+    }
+
+    @Published
+    private(set) var uiImage: UIImage?
+
+    private var isStopped = true
+
+    func startAnimating() {
+      guard isStopped, let imageData = imageData else {
+        return
+      }
+      isStopped = false
+
+      CGAnimateImageDataWithBlock(imageData as CFData, nil) { [weak self] _, cgImage, stop in
+        self?.uiImage = UIImage(cgImage: cgImage)
+
+        if let stopped = self?.isStopped {
+          stop.pointee = stopped
+        }
+      }
+    }
+
+    func stopAnimating() {
+      isStopped = true
+      guard let imageData = imageData else {
+        return
+      }
+      uiImage = UIImage(data: imageData)
     }
   }
 }
