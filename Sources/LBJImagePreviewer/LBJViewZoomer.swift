@@ -45,7 +45,7 @@ public struct LBJViewZoomer<Content: View>: View {
           )
           .padding(.vertical, (max(0, geometry.size.height - zoomedImageSize.height) / 2))
       }
-      .background(Color.black)
+//       .background(Color.black)
     }
     .ignoresSafeArea()
     .onDisappear {
