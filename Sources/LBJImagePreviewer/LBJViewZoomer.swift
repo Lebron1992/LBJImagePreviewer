@@ -38,7 +38,6 @@ public struct LBJViewZoomer<Content: View>: View {
       ScrollView([.vertical, .horizontal]) {
         imageContent
           .gesture(doubleTapGesture())
-          .gesture(zoomGesture())
           .frame(
             width: zoomedImageSize.width,
             height: zoomedImageSize.height
@@ -46,6 +45,11 @@ public struct LBJViewZoomer<Content: View>: View {
           .padding(.vertical, (max(0, geometry.size.height - zoomedImageSize.height) / 2))
       }
       .background(Color.black)
+      // Note: Attach the zoom gesture here to fix the issue
+      // where the view get stuck if you attach the gesture to `imageContent` in real device(works perfectly in simulator).
+      // But the zoome gesture become insensitive.
+      // This is the temporary solution. Let's wait for Apple's fix.
+      .gesture(zoomGesture())
     }
     .ignoresSafeArea()
     .onDisappear {
