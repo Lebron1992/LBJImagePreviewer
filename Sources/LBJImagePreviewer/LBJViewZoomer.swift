@@ -7,11 +7,11 @@ public struct LBJViewZoomer<Content: View>: View {
   private let maxScale: CGFloat
 
   /// 使用 `View` 、宽高比例、双击放大时的倍数和最大放大倍数创建 `LBJViewZoomer`
-  /// (Creates an `LBJViewZoomer` view using an `View`, width/height ratio, the zoom scale when user double-tap the image and max scale)。
+  /// (Creates an `LBJViewZoomer` view using an `View`, width/height ratio, the zoom scale when user double-tap the view and max scale)。
   /// - Parameters:
-  ///   - image: `View` 视图 (an `View`)
+  ///   - content: `View` 视图 (an `View`)
   ///   - aspectRatio: `View` 的宽高比例 (the width/height ratio of the `View`)
-  ///   - doubleTapScale: 双击放大时的倍数，默认是 3 (the zoom scale when user double-tap the image, 3 by default)
+  ///   - doubleTapScale: 双击放大时的倍数，默认是 3 (the zoom scale when user double-tap the view, 3 by default)
   ///   - maxScale: 最大放大倍数 (max scale, 16 by default)
   public init(
     content: Content,
@@ -34,17 +34,21 @@ public struct LBJViewZoomer<Content: View>: View {
 
   public var body: some View {
     GeometryReader { geometry in
-      let zoomedImageSize = zoomedImageSize(in: geometry)
+      let zoomedViewSize = zoomedViewSize(in: geometry)
       ScrollView([.vertical, .horizontal]) {
-        imageContent
+        viewContent
           .gesture(doubleTapGesture())
-          .gesture(zoomGesture())
           .frame(
-            width: zoomedImageSize.width,
-            height: zoomedImageSize.height
+            width: zoomedViewSize.width,
+            height: zoomedViewSize.height
           )
-          .padding(.vertical, (max(0, geometry.size.height - zoomedImageSize.height) / 2))
+          .padding(.vertical, (max(0, geometry.size.height - zoomedViewSize.height) / 2))
       }
+      // Note: Attach the zoom gesture here to fix the issue
+      // where the view gets stuck if you attach the gesture to `viewContent` on a real device(works perfectly on a simulator).
+      // But the zoome gesture becomes insensitive.
+      // This is the temporary solution. Let's wait for Apple's fix.
+      .gesture(zoomGesture())
     }
     .ignoresSafeArea()
     .onDisappear {
@@ -58,7 +62,7 @@ public struct LBJViewZoomer<Content: View>: View {
 // MARK: - Subviews
 private extension LBJViewZoomer {
   @ViewBuilder
-  var imageContent: some View {
+  var viewContent: some View {
     if let image = contentInfo.content as? Image {
       image
         .resizable()
@@ -120,30 +124,30 @@ private extension LBJViewZoomer {
 // MARK: - Helper Methods
 private extension LBJViewZoomer {
 
-  func imageSize(fits geometry: GeometryProxy) -> CGSize {
+  func viewSize(fits geometry: GeometryProxy) -> CGSize {
     let geoRatio = geometry.size.width / geometry.size.height
-    let imageRatio = contentInfo.aspectRatio
+    let contentRatio = contentInfo.aspectRatio
 
     let width: CGFloat
     let height: CGFloat
-    if imageRatio < geoRatio {
+    if contentRatio < geoRatio {
       height = geometry.size.height
-      width = height * imageRatio
+      width = height * contentRatio
     } else {
       width = geometry.size.width
-      height = width / imageRatio
+      height = width / contentRatio
     }
 
     return .init(width: width, height: height)
   }
 
-  func zoomedImageSize(in geometry: GeometryProxy) -> CGSize {
-    imageSize(fits: geometry) * zoomScale
+  func zoomedViewSize(in geometry: GeometryProxy) -> CGSize {
+    viewSize(fits: geometry) * zoomScale
   }
 }
 
 #if DEBUG
-struct LBJImagePreviewer_Previews: PreviewProvider {
+struct LBJViewZoomer_Previews: PreviewProvider {
   static var previews: some View {
     let uiImages = (1...2).compactMap { UIImage(named: "IMG_000\($0)", in: .module, with: nil) }
     LBJImagePreviewer(
