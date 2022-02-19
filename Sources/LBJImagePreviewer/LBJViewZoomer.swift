@@ -44,7 +44,6 @@ public struct LBJViewZoomer<Content: View>: View {
           )
           .padding(.vertical, (max(0, geometry.size.height - zoomedViewSize.height) / 2))
       }
-      .background(Color.black)
       // Note: Attach the zoom gesture here to fix the issue
       // where the view gets stuck if you attach the gesture to `viewContent` on a real device(works perfectly on a simulator).
       // But the zoome gesture becomes insensitive.
