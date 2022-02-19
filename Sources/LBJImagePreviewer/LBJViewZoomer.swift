@@ -50,7 +50,6 @@ public struct LBJViewZoomer<Content: View>: View {
       // This is the temporary solution. Let's wait for Apple's fix.
       .gesture(zoomGesture())
     }
-    .ignoresSafeArea()
     .onDisappear {
       if resetScaleOnDisappear {
         steadyStateZoomScale = 1
@@ -169,6 +168,7 @@ struct LBJViewZoomer_Previews: PreviewProvider {
 
     var body: some View {
       image
+        .resizable()
     }
   }
 }
